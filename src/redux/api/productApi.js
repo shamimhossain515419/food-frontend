@@ -5,32 +5,50 @@ const productApi = baseApi.injectEndpoints({
     // Mutation for creating a new ....
     createProduct: builder.mutation({
       query: (data) => ({
-        url: "/auth/product/products",
+        url: "/product/products",
         method: "POST",
+        contentType: "multipart/form-data",
         data,
       }),
       invalidatesTags: [tagTypes.product],
     }),
     updateProduct: builder.mutation({
       query: (data) => ({
-        url: "/auth/product/products",
+        url: "/product/products",
         method: "PUT",
+        contentType: "multipart/form-data",
         data,
       }),
       invalidatesTags: [tagTypes.product],
     }),
 
-    getProfile: builder.query({
+    getAllProduct: builder.query({
       query: () => ({
-        url: `/auth/profile`,
+        url: `/product/products`,
         method: "GET",
       }),
       providesTags: [tagTypes.product],
     }),
+    getSingleProduct: builder.query({
+      query: (id) => ({
+        url: `/product/products/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.product],
+    }),
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/product/products/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.product],
+    }),
   }),
 });
 export const {
-  useLoginMutation,
-  useCreateAccountMutation,
-  useGetProfileQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useGetAllProductQuery,
+  useGetSingleProductQuery,
+  useDeleteProductMutation,
 } = productApi;

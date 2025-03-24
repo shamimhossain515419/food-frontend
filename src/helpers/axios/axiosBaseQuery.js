@@ -18,7 +18,6 @@ export const axiosBaseQuery =
         headers: {
           // Set Content-Type header, defaulting to "application/json" if not provided
           "Content-Type": contentType || "application/json",
-          "x-igtechcasino-apikey": "67b326a3c7b2a49ccf6423ca",
           ...headers,
         },
         // meta use pagination limit ,pageNumber,totalData
