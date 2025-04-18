@@ -1,10 +1,10 @@
-import Shops from "@/components/pages/shops/Shops";
+import OrderList from "@/components/pages/profile/OrderList";
 import React from "react";
 
 const page = () => {
   return (
     <>
-      <Shops />
+      <OrderList />
     </>
   );
 };

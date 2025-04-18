@@ -30,8 +30,8 @@ const productApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.product],
     }),
     getSingleProduct: builder.query({
-      query: (id) => ({
-        url: `/product/products/${id}`,
+      query: (data) => ({
+        url: `/product/products/${data?.id}?category_id=${data?.category_id}`,
         method: "GET",
       }),
       providesTags: [tagTypes.product],
@@ -43,6 +43,14 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.product],
     }),
+    getCategoryWisProduct: builder.query({
+      query: (data) => ({
+        url: `/product/category-wise-product`,
+        method: "GET",
+        params: data,
+      }),
+      providesTags: [tagTypes.product],
+    }),
   }),
 });
 export const {
@@ -51,4 +59,5 @@ export const {
   useGetAllProductQuery,
   useGetSingleProductQuery,
   useDeleteProductMutation,
+  useGetCategoryWisProductQuery,
 } = productApi;

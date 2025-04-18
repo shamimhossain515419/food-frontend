@@ -1,12 +1,16 @@
 "use client";
-
+import { PiShoppingCartLight } from "react-icons/pi";
 import { useState } from "react";
 import Link from "next/link";
 import { FaBars } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { useSelector } from "react-redux";
+import { useGetProfileQuery } from "@/redux/api/authApi";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { products } = useSelector((state) => state.card);
+  const { data } = useGetProfileQuery();
 
   return (
     <nav className="bg-primary-color p-4 shadow-md">
@@ -30,6 +34,11 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
+            <Link href="/shops" className="hover:text-gray-200">
+              Shops
+            </Link>
+          </li>
+          <li>
             <Link href="/about-us" className="hover:text-gray-200">
               About
             </Link>
@@ -39,10 +48,27 @@ export default function Navbar() {
               Services
             </Link>
           </li>
-          <li>
-            <Link href="/login" className="hover:text-gray-200">
-              Signin/Signup
+          <div className=" relative">
+            <Link
+              href={"/shopping-card"}
+              className={`md:bg-primary-base cursor-pointer rounded-full  w-[40px] h-[40px] flex justify-center items-center text-primary-base md:text-white`}
+            >
+              <PiShoppingCartLight className="text-[14px] md:text-[24px]" />
+              <p className="bg-red-500  font-semibold absolute  left-[18px]  -top-[4px] w-[20px] h-[20px] flex justify-center items-center rounded-full text-white">
+                <span className="text-[10px]"> {products?.length}</span>
+              </p>
             </Link>
+          </div>
+          <li>
+            {data?.data?.email ? (
+              <Link href="/profile" className="hover:text-gray-200">
+                Profile
+              </Link>
+            ) : (
+              <Link href="/login" className="hover:text-gray-200">
+                Signin/Signup
+              </Link>
+            )}
           </li>
         </ul>
       </div>

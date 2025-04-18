@@ -81,7 +81,7 @@ const AllProduct = () => {
                   <td className="px-4 py-3">
                     <div className="flex items-center space-x-2">
                       <Link
-                        href={"/category/edit/" + product?.id}
+                        href={"/products/edit/" + product?.id}
                         className=" text-blue-500 cursor-pointer"
                       >
                         <MdEdit />

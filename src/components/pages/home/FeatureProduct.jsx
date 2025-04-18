@@ -1,5 +1,7 @@
+"use client";
 import ProductCard from "@/components/ui/ProductCard";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { useGetCategoryWisProductQuery } from "@/redux/api/productApi";
 import React from "react";
 const demoProducts = [
   {
@@ -29,12 +31,17 @@ const demoProducts = [
 ];
 
 const FeatureProduct = () => {
+  const { data, error } = useGetCategoryWisProductQuery({
+    category_id: "1",
+  });
+  console.log(data, "data");
+  console.log(error, "error");
   return (
     <div className="container mx-auto mt-10">
       <SectionTitle title={"Popular product"}></SectionTitle>
       <div className=" py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {demoProducts.map((product) => (
-          <ProductCard key={product._id} card={product} />
+        {data?.data?.map((product, index) => (
+          <ProductCard key={index} card={product} />
         ))}
       </div>
     </div>

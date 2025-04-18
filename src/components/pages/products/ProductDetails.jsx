@@ -1,56 +1,56 @@
 "use client";
 
+import ProductCard from "@/components/ui/ProductCard";
+import SectionTitle from "@/components/ui/SectionTitle";
+import { useGetSingleProductQuery } from "@/redux/api/productApi";
+import { addToCart } from "@/redux/features/cardSlice";
+import Image from "next/image";
 import { useState } from "react";
 import { FaShoppingCart, FaStar } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
-const ProductDetails = () => {
+const ProductDetails = ({ id }) => {
   const [quantity, setQuantity] = useState(1);
-
-  // Dummy product data (Replace with actual API data)
-  const product = {
-    id: 1,
-    name: "Wireless Headphones",
-    description:
-      "High-quality wireless headphones with noise cancellation and long battery life.",
-    price: 120.99,
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg", // Replace with actual image URL
-    rating: 4.5,
-    reviews: [
-      { id: 1, user: "John Doe", comment: "Amazing sound quality!", rating: 5 },
-      {
-        id: 2,
-        user: "Jane Smith",
-        comment: "Very comfortable to wear.",
-        rating: 4,
-      },
-    ],
-  };
+  const { data, error } = useGetSingleProductQuery({ category_id: true, id });
+  const productInfo = data?.data?.products;
+  const relatedProduct = data?.data?.categories;
+  const dispatch = useDispatch();
 
   const handleAddToCart = () => {
-    console.log(`Added ${quantity} of ${product.name} to cart`);
+    dispatch(
+      addToCart({
+        ...data?.data?.products,
+        stock: quantity,
+      })
+    );
   };
 
   return (
     <div className="container mx-auto px-4 py-10">
       <div className="grid md:grid-cols-2 gap-8">
         {/* Product Image */}
-        <div>
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full rounded-lg shadow-lg"
+        <div className="max-h-[350px]">
+          <Image
+            src={
+              process.env.NEXT_PUBLIC_IMAGE_API_URL +
+              "/storage/" +
+              productInfo?.photo
+            }
+            width={500}
+            height={350}
+            alt="Product Image"
+            className="w-full h-full object-fill rounded-lg shadow-lg"
           />
         </div>
 
         {/* Product Details */}
         <div>
-          <h1 className="text-3xl font-semibold text-gray-800">
-            {product.name}
+          <h1 className="text-base md:text-3xl capitalize font-semibold text-gray-800">
+            {productInfo?.name}
           </h1>
-          <p className="text-gray-600 mt-2">{product.description}</p>
+          <p className="text-gray-600 mt-2">{productInfo?.description}</p>
           <p className="text-xl font-bold text-primary-color mt-4">
-            ${product.price}
+            {productInfo?.price} TK
           </p>
 
           {/* Rating */}
@@ -59,24 +59,24 @@ const ProductDetails = () => {
               <FaStar
                 key={i}
                 className={`text-yellow-500 ${
-                  i < product.rating ? "" : "opacity-50"
+                  i < productInfo?.rating ? "" : "opacity-50"
                 }`}
               />
             ))}
-            <span className="text-gray-600 ml-2">({product.rating})</span>
+            <span className="text-gray-600 ml-2">({4})</span>
           </div>
 
           {/* Quantity Selector */}
           <div className="mt-4 flex items-center space-x-4">
             <button
-              className="bg-gray-300 px-3 py-1 rounded-md"
+              className="bg-gray-300 cursor-pointer px-3 py-1 rounded-md"
               onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
             >
               -
             </button>
             <span className="text-lg">{quantity}</span>
             <button
-              className="bg-gray-300 px-3 py-1 rounded-md"
+              className="bg-gray-300 cursor-pointer px-3 py-1 rounded-md"
               onClick={() => setQuantity((prev) => prev + 1)}
             >
               +
@@ -86,10 +86,18 @@ const ProductDetails = () => {
           {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            className="mt-6 bg-primary-color text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition"
+            className="mt-6 bg-primary-color cursor-pointer text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition"
           >
             <FaShoppingCart /> Add to Cart
           </button>
+        </div>
+      </div>
+      <div className="pt-25">
+        <SectionTitle title={"Related products"}></SectionTitle>
+        <div className=" py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {relatedProduct?.map((product, index) => (
+            <ProductCard key={index} card={product} />
+          ))}
         </div>
       </div>
     </div>

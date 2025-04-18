@@ -1,10 +1,10 @@
 import EditProduct from "@/components/pages/admin/products/EditProduct";
 import React from "react";
 
-const page = () => {
+const page = ({ params }) => {
   return (
     <div>
-      <EditProduct />
+      <EditProduct id={params?.id} />
     </div>
   );
 };

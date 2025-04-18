@@ -1,10 +1,10 @@
-import Shops from "@/components/pages/shops/Shops";
+import Profile from "@/components/pages/profile/Profile";
 import React from "react";
 
 const page = () => {
   return (
     <>
-      <Shops />
+      <Profile />
     </>
   );
 };
